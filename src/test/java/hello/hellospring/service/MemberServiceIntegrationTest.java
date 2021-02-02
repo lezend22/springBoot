@@ -13,6 +13,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+
 @SpringBootTest
 @Transactional
 public class MemberServiceIntegrationTest {
@@ -27,7 +28,7 @@ public class MemberServiceIntegrationTest {
     public void 회원가입() throws Exception {
         //Given
         Member member = new Member();
-        member.setName("spring100");
+        member.setName("spring");
 
         //When
         Long saveId = memberService.join(member);
@@ -38,15 +39,18 @@ public class MemberServiceIntegrationTest {
     }
     @Test
     public void 중복_회원_예외() throws Exception {
+
         //Given
         Member member1 = new Member();
-        member1.setName("spring");
+        member1.setName("spring2");
+
         Member member2 = new Member();
-        member2.setName("spring");
+        member2.setName("spring2");
+
         //When
         memberService.join(member1);
-        IllegalStateException e = assertThrows(IllegalStateException.class,
+        IllegalArgumentException e = assertThrows(IllegalArgumentException.class,
                 () -> memberService.join(member2));//예외가 발생해야 한다.
-        assertThat(e.getMessage()).isEqualTo("이미 존재하는 회원입니다.");
+        assertThat(e.getMessage()).isEqualTo("이미 존재하는 이름입니다.");
     }
 }
